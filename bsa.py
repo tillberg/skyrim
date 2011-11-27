@@ -81,7 +81,11 @@ while file_num < file_count:
             # and 12 assorted extra bytes of who knows what.
             header_size = 1 + len(folder_path) + len(filename) + 12
             f.seek(file_offset + header_size)
-            data = f.read(file_size - header_size)
+            dataArr = []
+            bytes_left = file_size - header_size
+            while bytes_left > 0:
+                dataArr.append(f.read(min(bytes_left, 16384)))
+            data = ''.join(dataArr)
             f2.write(data)
             parse(data[8:])
     file_num += 1

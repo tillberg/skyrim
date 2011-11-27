@@ -88,8 +88,8 @@ while file_num < file_count:
                 bytes_to_read = 0x4000 - (0x3fff & position)
                 if bytes_to_read > bytes_left:
                     bytes_to_read = bytes_left
-                dataArr.append(f.read(bytes_to_read))
                 f.read(5)
+                dataArr.append(f.read(bytes_to_read))
                 bytes_left -= bytes_to_read
             data = ''.join(dataArr)
             f2.write(data)

@@ -61,9 +61,9 @@ while file_num < file_count:
             with open(filename, 'w') as f2:
                 header_size = 1 + len(folder_path) + len(filename) + 12
                 f.seek(file_offset + header_size)
-                file_size -= header_size + 1
+                file_size -= header_size
                 f2.write(f.read(16384))
-                f.seek(1, 1)
+                #f.seek(1, 1)
                 f2.write(f.read(file_size - 16384))
     file_num += 1
 

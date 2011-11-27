@@ -86,6 +86,7 @@ while file_num < file_count:
             while bytes_left > 0:
                 bytes_to_read = min(bytes_left, 16384)
                 dataArr.append(f.read(bytes_to_read))
+                f.read(5)
                 bytes_left -= bytes_to_read
             data = ''.join(dataArr)
             f2.write(data)

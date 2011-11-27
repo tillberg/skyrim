@@ -61,8 +61,10 @@ def parse(data):
         offset = 12 + length
         if chunktype == 'IDAT':
             real_offset = data.find('IEND') - 4
+            print 'offset: %s, real: %s' % (offset, real_offset)
             offset = real_offset
-        parse(data[(offset):])
+        if chunktype != 'IEND':
+            parse(data[(offset):])
 
 file_num = 0
 html = open('pics.html', 'w')

@@ -86,6 +86,8 @@ while file_num < file_count:
             while bytes_left > 0:
                 position = f2.tell()
                 bytes_to_read = 0x4000 - (0x3fff & position)
+                if bytes_to_read > bytes_left:
+                    bytes_to_read = bytes_left
                 dataArr.append(f.read(bytes_to_read))
                 f.read(5)
                 bytes_left -= bytes_to_read

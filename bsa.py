@@ -58,7 +58,7 @@ def parse(data):
         chunk = data[8:(8 + length)]
         #crc = struct.unpack(">L", data[(8 + length):(8 + length + 4)])
         print '%s: %s bytes' % (chunktype, length)
-        offset = 12 + length
+        offset = 16 + length
         if chunktype == 'IDAT':
             real_offset = data.find('IEND') - 4
             offset = real_offset

@@ -79,8 +79,8 @@ while file_num < file_count:
             # The offset given by the BSA headers above are all 1 byte off of actual file offsets
             # Beyond that, there is a header for each file that includes the folder path, filename,
             # and 12 assorted extra bytes of who knows what.
-            header_size = 1 + len(folder_path) + len(filename) + 12
-            f.seek(file_offset + header_size)
+            header_size = len(folder_path) + len(filename) + 12
+            f.seek(file_offset + 1)
             dataArr = []
             bytes_left = file_size - header_size
             while bytes_left > 0:

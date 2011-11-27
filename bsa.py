@@ -90,7 +90,7 @@ while file_num < file_count:
                 if bytes_to_read > bytes_left:
                     bytes_to_read = bytes_left
                 dataArr.append(f.read(bytes_to_read))
-                f.read(5)
+                #f.read(5)
                 bytes_left -= bytes_to_read
             data = (''.join(dataArr))[header_size:]
             f2.write(data)

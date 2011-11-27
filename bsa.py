@@ -71,6 +71,6 @@ while file_num < file_count:
             f.seek(file_offset + header_size)
             data = f.read(file_size - header_size)
             f2.write(data)
-            parse(data[8:])
+            parse(data[12:])
     file_num += 1
 

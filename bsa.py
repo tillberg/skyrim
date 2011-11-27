@@ -53,7 +53,7 @@ while file_num < file_count:
 
 file_num = 0
 html = open('pics.html', 'w')
-html.write('<style>img { float: left; }</style>')
+html.write('<style>img { float: left; border: 1px solid black; }</style>')
 while file_num < file_count:
     folder_path, filename, file_hash, file_offset, file_size = files2[file_num]
     if filename.endswith('.png'):

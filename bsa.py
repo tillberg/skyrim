@@ -72,8 +72,8 @@ html.write('<style>img { float: left; border: 1px solid black; height: 200px; wi
 while file_num < file_count:
     folder_path, filename, file_hash, file_offset, file_size = files2[file_num]
     if filename.endswith('.png'):
-        #print "%s\\%s hash=%08X offset=%d length=%d" % \
-        #    (folder_path, filename, file_hash, file_offset, file_size)
+        print "%s\\%s hash=%08X offset=%08X length=%08X" % \
+            (folder_path, filename, file_hash, file_offset, file_size)
         html.write('<img src="%s">' % filename)
         with open(filename, 'w') as f2:
             # The offset given by the BSA headers above are all 1 byte off of actual file offsets

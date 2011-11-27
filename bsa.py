@@ -51,7 +51,7 @@ while file_num < file_count:
     else:
         current_filename += ch
 
-def parse(data):
+def parsePngHeaders(data):
     if len(data):
         length = struct.unpack(">L", data[0:4])[0]
         chunktype = data[4:8]
@@ -64,7 +64,7 @@ def parse(data):
             print 'offset: %s, real: %s' % (offset, real_offset)
             offset = real_offset
         if chunktype != 'IEND':
-            parse(data[(offset):])
+            parsePngHeaders(data[(offset):])
 
 file_num = 0
 html = open('pics.html', 'w')
@@ -80,20 +80,27 @@ while file_num < file_count:
             # Beyond that, there is a header for each file that includes the folder path, filename,
             # and 12 assorted extra bytes of who knows what.
             header_size = len(folder_path) + len(filename) + 12
-            f.seek(file_offset + 1)
+            f.seek(file_offset)
             dataArr = []
-            bytes_left = file_size
+            bytes_left = file_size# - header_size
+            #f.read(header_size)
+            print 'header size: %s' % header_size
             while bytes_left > 0:
-                position = f2.tell()
-                bytes_to_read = max(0, 0x4000 - (0x3fff & (position + 5)))
-                #bytes_to_read = min(bytes_left, 16384)
+                #position = f.tell()
+                #bytes_to_read = max(0, 0x4000 - (0x3fff & (position + 0x2022)))
+                bytes_to_read = min(bytes_left, 0x4000 - 5)
                 if bytes_to_read > bytes_left:
                     bytes_to_read = bytes_left
+                print ord(f.read(1)[0])
                 dataArr.append(f.read(bytes_to_read))
-                f.read(5)
+                f.read(4)
                 bytes_left -= bytes_to_read
             data = (''.join(dataArr))[header_size:]
+            #for i in range(0x4000):
+            #    if len(data[i:(i+5)]) == 5 and data[i:(i+5)] == data[(i + 0x4000):(i + 0x4005)]:
+            #        print ' '.join(ord(x) for x in (data[i:(i+4)]))
+            #        print i
             f2.write(data)
-            parse(data[8:])
+            parsePngHeaders(data[8:])
     file_num += 1
 

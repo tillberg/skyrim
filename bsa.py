@@ -57,12 +57,13 @@ while file_num < file_count:
     if filename.endswith('.png'):
         print "%s\\%s hash=%08X offset=%d length=%d" % \
             (folder_path, filename, file_hash, file_offset, file_size)
-        with open(filename, 'w') as f2:
-            header_size = 1 + len(folder_path) + len(filename) + 12
-            f.seek(file_offset + header_size)
-            file_size -= header_size + 4
-            f2.write(f.read(16384))
-            f.seek(4, 1)
-            f2.write(f.read(file_size - 16384))
+        if file_size > 16384 + 200:
+            with open(filename, 'w') as f2:
+                header_size = 1 + len(folder_path) + len(filename) + 12
+                f.seek(file_offset + header_size)
+                file_size -= header_size + 4
+                f2.write(f.read(16384))
+                f.seek(4, 1)
+                f2.write(f.read(file_size - 16384))
     file_num += 1
 

@@ -56,7 +56,7 @@ def parse(data):
         length = struct.unpack(">L", data[0:4])[0]
         chunktype = data[4:8]
         chunk = data[8:(8 + length)]
-        crc = struct.unpack(">L", data[(8 + length):(8 + length + 4)])
+        #crc = struct.unpack(">L", data[(8 + length):(8 + length + 4)])
         print '%s: %s bytes' % (chunktype, length)
         parse(data[(12 + length):])
 

@@ -53,9 +53,12 @@ while file_num < file_count:
 
 def parse(data):
     if data:
-        length, chunktype, chunk, crc = struct.unpack(">LLLL", data[:16])
-        print '%s: %s bytes' % (data[4:8], length)
-        parse(data[(16 + length):])
+        length = struct.unpack(">L", data[0:4])
+        chunktype = data[4:8]
+        chunk = data[8:8 + length]
+        crc = struct.unpack(">L", data[8 + length:8 + length + 4])
+        print '%s: %s bytes' % (chunktype, length)
+        parse(data[(12 + length):])
 
 file_num = 0
 html = open('pics.html', 'w')

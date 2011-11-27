@@ -53,6 +53,7 @@ while file_num < file_count:
 
 def parse(data):
     if data:
+        print data[:16]
         length, chunktype, chunk, crc = struct.unpack(data[:16], "<LLLL")
         print '%s: %s bytes' % (chunktype, length)
         parse(data[(16 + length):])

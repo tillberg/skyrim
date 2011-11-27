@@ -92,7 +92,7 @@ while file_num < file_count:
                 dataArr.append(f.read(bytes_to_read))
                 #f.read(5)
                 bytes_left -= bytes_to_read
-            data = (''.join(dataArr))
+            data = (''.join(dataArr))[header_size:]
             f2.write(data)
             parse(data[8:])
     file_num += 1

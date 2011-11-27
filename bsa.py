@@ -58,7 +58,10 @@ def parse(data):
         chunk = data[8:(8 + length)]
         #crc = struct.unpack(">L", data[(8 + length):(8 + length + 4)])
         print '%s: %s bytes' % (chunktype, length)
-        parse(data[(12 + length):])
+        offset = 12
+        if chunktype == 'IDAT':
+            offset += 4
+        parse(data[(offset + length):])
 
 file_num = 0
 html = open('pics.html', 'w')

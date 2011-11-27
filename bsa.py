@@ -56,7 +56,7 @@ def parse(data):
     if data:
         length, chunktype, chunk, crc = struct.unpack(">LLLL", data[:16])
         print '%s: %s bytes' % (data[4:8], length)
-        parse(data[(16 + math.ceil(length / 4) * 4):])
+        parse(data[(16 + int(math.ceil(length / 4) * 4)):])
 
 file_num = 0
 html = open('pics.html', 'w')

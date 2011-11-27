@@ -52,14 +52,18 @@ while file_num < file_count:
         current_filename += ch
 
 file_num = 0
+html = open('pics.html', 'w')
+html.write('<style>img { float: left; }</style>')
 while file_num < file_count:
     folder_path, filename, file_hash, file_offset, file_size = files2[file_num]
     if filename.endswith('.png'):
         print "%s\\%s hash=%08X offset=%d length=%d" % \
             (folder_path, filename, file_hash, file_offset, file_size)
+        html.write('<img src="%s">' % filename)
         with open(filename, 'w') as f2:
             header_size = 1 + len(folder_path) + len(filename) + 12
             f.seek(file_offset + header_size)
             f2.write(f.read(file_size - header_size))
+    
     file_num += 1
 

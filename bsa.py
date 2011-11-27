@@ -52,7 +52,10 @@ while file_num < file_count:
 
 file_num = 0
 while file_num < file_count:
-    folder_path, current_filename, file_hash, file_offset, file_size = files2[file_num]
-    print "%s\\%s hash=%08X offset=%d length=%d" % \
-        (folder_path, current_filename, file_hash, file_offset, file_size)
+    folder_path, filename, file_hash, file_offset, file_size = files2[file_num]
+    if filename.endswith('.png'):
+        print "%s\\%s hash=%08X offset=%d length=%d" % \
+            (folder_path, filename, file_hash, file_offset, file_size)
+        
     file_num += 1
+

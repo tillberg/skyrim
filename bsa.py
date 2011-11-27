@@ -51,6 +51,12 @@ while file_num < file_count:
     else:
         current_filename += ch
 
+def parse(data):
+    if data:
+        length, chunktype, chunk, crc = struct.unpack(data[0:16], "<LLLL")
+        print '%s: %s bytes' % (chunktype, length)
+        parse(data[(16 + length):])
+
 file_num = 0
 html = open('pics.html', 'w')
 html.write('<style>img { float: left; border: 1px solid black; height: 200px; width: 200px; }</style>')
@@ -63,7 +69,8 @@ while file_num < file_count:
         with open(filename, 'w') as f2:
             header_size = 1 + len(folder_path) + len(filename) + 12
             f.seek(file_offset + header_size)
-            f2.write(f.read(file_size - header_size))
-    
+            data = f.read(file_size - header_size)
+            f2.write(data)
+            parse(data[8:])
     file_num += 1
 

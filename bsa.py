@@ -58,7 +58,8 @@ while file_num < file_count:
         print "%s\\%s hash=%08X offset=%d length=%d" % \
             (folder_path, filename, file_hash, file_offset, file_size)
         with open(filename, 'w') as f2:
-            f.seek(1 + file_offset + len(folder_path) + len(filename) + 12)
-            f2.write(f.read(file_size))
+            header_size = 1 + len(folder_path) + len(filename) + 12
+            f.seek(file_offset + header_size)
+            f2.write(f.read(file_size - header_size))
     file_num += 1
 

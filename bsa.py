@@ -2,6 +2,7 @@
 
 import struct
 import sys
+import os
 
 if len(sys.argv) == 2:
     BSA_FILE = sys.argv[1]
@@ -45,6 +46,7 @@ while file_num < file_count:
         print "%s\\%s hash=%08X offset=%d length=%d" % \
             (folder_path, current_filename, file_hash, file_offset, file_size)
         current_filename = ""
+        os.system('mkdir -p %s' % folder_path)
         file_num += 1
     else:
         current_filename += ch

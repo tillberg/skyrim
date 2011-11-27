@@ -84,7 +84,9 @@ while file_num < file_count:
             dataArr = []
             bytes_left = file_size - header_size
             while bytes_left > 0:
-                dataArr.append(f.read(min(bytes_left, 16384)))
+                bytes_to_read = min(bytes_left, 16384)
+                dataArr.append(f.read(bytes_to_read))
+                bytes_left -= bytes_to_read
             data = ''.join(dataArr)
             f2.write(data)
             parse(data[8:])

@@ -46,7 +46,7 @@ while file_num < file_count:
         print "%s\\%s hash=%08X offset=%d length=%d" % \
             (folder_path, current_filename, file_hash, file_offset, file_size)
         current_filename = ""
-        print 'mkdir -p "%s"' % folder_path
+        os.system('mkdir -p "%s"' % folder_path)
         file_num += 1
     else:
         current_filename += ch

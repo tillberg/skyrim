@@ -76,6 +76,9 @@ while file_num < file_count:
             (folder_path, filename, file_hash, file_offset, file_size)
         html.write('<img src="%s">' % filename)
         with open(filename, 'w') as f2:
+            # The offset given by the BSA headers above are all 1 byte off of actual file offsets
+            # Beyond that, there is a header for each file that includes the folder path, filename,
+            # and 12 assorted extra bytes of who knows what.
             header_size = 1 + len(folder_path) + len(filename) + 12
             f.seek(file_offset + header_size)
             data = f.read(file_size - header_size)

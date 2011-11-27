@@ -82,7 +82,7 @@ while file_num < file_count:
             header_size = len(folder_path) + len(filename) + 12
             f.seek(file_offset + 1)
             dataArr = []
-            bytes_left = file_size - header_size
+            bytes_left = file_size
             while bytes_left > 0:
                 #position = f2.tell()
                 #bytes_to_read = max(0, 0x4000 - (0x3fff & position) - 5)

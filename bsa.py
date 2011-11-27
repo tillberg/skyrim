@@ -60,7 +60,7 @@ def parse(data):
         print '%s: %s bytes' % (chunktype, length)
         offset = 12
         if chunktype == 'IDAT':
-            offset += 4
+            offset -= 4
         parse(data[(offset + length):])
 
 file_num = 0

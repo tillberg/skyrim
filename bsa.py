@@ -4,7 +4,6 @@ from __future__ import with_statement
 import struct
 import sys
 import os
-import math
 
 if len(sys.argv) == 2:
     BSA_FILE = sys.argv[1]
@@ -56,7 +55,7 @@ def parse(data):
     if data:
         length, chunktype, chunk, crc = struct.unpack(">LLLL", data[:16])
         print '%s: %s bytes' % (data[4:8], length)
-        parse(data[(16 + int(math.ceil(length / 4) * 4)):])
+        parse(data[(16 + length):])
 
 file_num = 0
 html = open('pics.html', 'w')

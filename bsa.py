@@ -88,7 +88,7 @@ while file_num < file_count:
             while bytes_left > 0:
                 #position = f.tell()
                 #bytes_to_read = max(0, 0x4000 - (0x3fff & (position + 0x2022)))
-                bytes_to_read = min(bytes_left, 0x4000 - 5)
+                bytes_to_read = min(bytes_left, 0x4000 - 1)
                 if bytes_to_read > bytes_left:
                     bytes_to_read = bytes_left
                 print ord(f.read(1)[0])

@@ -84,7 +84,7 @@ while file_num < file_count:
             dataArr = []
             bytes_left = file_size# - header_size
             #f.read(header_size)
-            print 'header size: %s' % header_size
+            #print 'header size: %s' % header_size
             while bytes_left > 0:
                 #position = f.tell()
                 #bytes_to_read = max(0, 0x4000 - (0x3fff & (position + 0x2022)))
@@ -93,7 +93,7 @@ while file_num < file_count:
                     bytes_to_read = bytes_left
                 print ord(f.read(1)[0])
                 dataArr.append(f.read(bytes_to_read))
-                f.read(4)
+                #f.read(4)
                 bytes_left -= bytes_to_read
             data = (''.join(dataArr))[header_size:]
             #for i in range(0x4000):

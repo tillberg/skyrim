@@ -85,7 +85,8 @@ while file_num < file_count:
             bytes_left = file_size - header_size
             while bytes_left > 0:
                 position = f2.tell()
-                bytes_to_read = max(0, 0x4000 - (0x3fff & position) - 5)
+                #bytes_to_read = max(0, 0x4000 - (0x3fff & position) - 5)
+                bytes_to_read = min(bytes_left, 16384)
                 if bytes_to_read > bytes_left:
                     bytes_to_read = bytes_left
                 dataArr.append(f.read(bytes_to_read))

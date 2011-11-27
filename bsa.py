@@ -52,7 +52,7 @@ while file_num < file_count:
         current_filename += ch
 
 def parse(data):
-    if data:
+    if len(data):
         length = struct.unpack(">L", data[0:4])[0]
         chunktype = data[4:8]
         chunk = data[8:(8 + length)]

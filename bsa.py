@@ -60,7 +60,7 @@ while file_num < file_count:
         if file_size > 16384 + 200:
             with open(filename, 'w') as f2:
                 header_size = 1 + len(folder_path) + len(filename) + 12
-                f.seek(file_offset + 1)
+                f.seek(file_offset + header_size)
                 f2.write(f.read(file_size))
                 
                 #

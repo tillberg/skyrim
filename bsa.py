@@ -39,14 +39,20 @@ assert file_count == len(files)
 
 file_num = 0 
 current_filename = ""
+files2 = []
 while file_num < file_count:
     ch = f.read(1)
     if ch == "\x00":
         file_hash, file_size, file_offset, folder_path = files[file_num]
-        print "%s\\%s hash=%08X offset=%d length=%d" % \
-            (folder_path, current_filename, file_hash, file_offset, file_size)
+        files2.append((folder_path, current_filename, file_hash, file_offset, file_size))
         current_filename = ""
-        os.system('mkdir -p "%s"' % folder_path.replace('\\', '/'))
         file_num += 1
     else:
         current_filename += ch
+
+file_num = 0
+while file_num < file_count:
+    folder_path, current_filename, file_hash, file_offset, file_size = files2[file_num]
+    print "%s\\%s hash=%08X offset=%d length=%d" % \
+        (folder_path, current_filename, file_hash, file_offset, file_size)
+    file_num += 1

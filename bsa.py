@@ -61,6 +61,10 @@ def parsePngHeaders(data):
         print '%s: %s bytes' % (chunktype, length)
         offset = 12 + length
         if chunktype == 'IDAT':
+            # We're looking now at the data chunk, which is followed immediately
+            # by the IEND chunk.  The length of the data chunk should correspond
+            # to the actual distance to the IEND code in the data stream.  Using
+            # this, we can calculate how many extra bytes are inserted in the file.
             real_offset = data.find('IEND') - 4
             print 'offset: %s, real: %s' % (offset, real_offset)
             #offset = real_offset
@@ -93,6 +97,11 @@ while file_num < file_count:
             header_size = len(folder_path) + len(filename) + 8
             d = data
             d = d[header_size:]
+            # Here, we're going to selectively cut out five byte segments of the data stream.  I have
+            # no idea what these 5 byte chunks are, but at least for m_letter.png, these offsets work.
+            # It's... close to 0x4030 jumps, but not consistent.  For some other files, especially 
+            # the larger PNGs, something else is going on, as the differences between the PNG headers
+            # are misaligned by non-multiples of 5.
             index = 0x403b
             index2 = 0x8070
             index3 = 0xc0a0

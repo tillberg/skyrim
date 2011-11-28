@@ -93,7 +93,7 @@ while file_num < file_count:
             header_size = len(folder_path) + len(filename) + 8
             d = data
             d = d[header_size:]
-            index = 0x403b
+            index = 0x4040
             index2 = 0x8070
             index3 = 0xc0a0
             index4 = 0x100d0

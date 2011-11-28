@@ -105,11 +105,11 @@ while file_num < file_count:
             index2 = 0x8070
             index3 = 0xc0a0
             index4 = 0x100d0
-            pngfile = d[0:(index-5)] + d[(index):(index2 - 5)] + d[(index2):(index3 - 5)] + d[(index3):(index4 - 5)] + d[(index4):0x14000]
+            pngdata = d[0:(index-5)] + d[(index):(index2 - 5)] + d[(index2):(index3 - 5)] + d[(index3):(index4 - 5)] + d[(index4):0x14000]
             #pngfile = d[5:0x4000] + d[0x4005:0x8000] + d[0x8005:0xc000] + d[0xc005:0x10000] + d[0x10005:0x14000]
-            f2.write(pngfile)
-            diff, chunk = parsePngHeaders(pngfile[8:])
-            delta = (len(pngfile) >> 14) * 5 - diff if diff is not None else None
+            f2.write(pngdata)
+            diff, chunk = parsePngHeaders(pngdata[8:])
+            delta = (len(pngdata) >> 14) * 5 - diff if diff is not None else None
             print 'diff: %s, delta from exp: %s' % (diff, delta)
             # parsePngHeaders returns the amount that the size of the last chunk was off by as well
             # as the data chunk from the png.  This should be zlib decrompressible.

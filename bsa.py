@@ -63,11 +63,17 @@ def parsePngHeaders(data):
         if chunktype == 'IDAT':
             real_offset = data.find('IEND') - 4
             print 'offset: %s, real: %s' % (offset, real_offset)
-            offset = real_offset
-            return chunk
+            #offset = real_offset
+            return (real_offset - offset, chunk)
         else:
             return parsePngHeaders(data[(offset):])
-    return None
+    else:
+        return (None, None)
+
+#with open('test.png') as tf:
+#    data = tf.read()
+#    chunk = parsePngHeaders(data[8:])
+#    zlib.decompress(chunk)
 
 file_num = 0
 html = open('pics.html', 'w')
@@ -82,28 +88,19 @@ while file_num < file_count:
             # The offset given by the BSA headers above are all 1 byte off of actual file offsets
             # Beyond that, there is a header for each file that includes the folder path, filename,
             # and 12 assorted extra bytes of who knows what.
-            header_size = len(folder_path) + len(filename) + 8
             f.seek(file_offset)
-            dataArr = []
-            bytes_left = file_size# - header_size
-            #f.read(header_size)
-            #print 'header size: %s' % header_size
-            while bytes_left > 0:
-                #position = f.tell()
-                #bytes_to_read = max(0, 0x4000 - (0x3fff & (position + 0x2022)))
-                bytes_to_read = min(bytes_left, 0x4000)
-                if bytes_to_read > bytes_left:
-                    bytes_to_read = bytes_left
-                f.read(4)
-                f.read(1)
-                dataArr.append(f.read(bytes_to_read))
-                bytes_left -= bytes_to_read
-            data = (''.join(dataArr))[header_size:]
-            #for i in range(0x4000):
-            #    if len(data[i:(i+5)]) == 5 and data[i:(i+5)] == data[(i + 0x4000):(i + 0x4005)]:
-            #        print ' '.join(ord(x) for x in (data[i:(i+4)]))
-            #        print i
-            f2.write(data)
-            parsePngHeaders(data[8:])
+            data = f.read(file_size)
+            header_size = 1 + len(folder_path) + len(filename) + 12
+            pngfile = data[header_size:]
+            
+            f2.write(pngfile)
+            diff, chunk = parsePngHeaders(pngfile[8:])
+            delta = (len(pngfile) >> 14) * 5 - diff if diff is not None else None
+            print 'diff: %s, delta from exp: %s' % (diff, delta)
+            try:
+                zlib.decompress(chunk)
+                print 'success!'
+            except:
+                pass
     file_num += 1
 

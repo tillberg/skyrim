@@ -94,7 +94,7 @@ while file_num < file_count:
             # and 12 assorted extra bytes of who knows what.
             f.seek(file_offset)
             data = f.read(file_size)
-            header_size = len(folder_path) + len(filename) + 8
+            header_size = 1 + len(folder_path) + len(filename) + 12
             d = data
             d = d[header_size:]
             # Here, we're going to selectively cut out five byte segments of the data stream.  I have
@@ -106,7 +106,7 @@ while file_num < file_count:
             index2 = 0x8070
             index3 = 0xc0a0
             index4 = 0x100d0
-            pngfile = d[5:(index)] + d[(index + 5):index2] + d[(index2 + 5):index3] + d[(index3 + 5):index4] + d[(index4 + 5):0x14000]
+            pngfile = d[0:(index-5)] + d[(index):(index2 - 5)] + d[(index2):(index3 - 5)] + d[(index3):(index4 - 5)] + d[(index4):0x14000]
             #pngfile = d[5:0x4000] + d[0x4005:0x8000] + d[0x8005:0xc000] + d[0xc005:0x10000] + d[0x10005:0x14000]
             f2.write(pngfile)
             diff, chunk = parsePngHeaders(pngfile[8:])

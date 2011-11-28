@@ -82,9 +82,11 @@ def parsePngHeaders(data):
 file_num = 0
 html = open('pics.html', 'w')
 html.write('<style>img { float: left; border: 1px solid black; height: 200px; width: 200px; }</style>')
+counter = 0
 while file_num < file_count:
     folder_path, filename, file_hash, file_offset, file_size = files2[file_num]
-    if filename.endswith('.png'):
+    counter += 1
+    if filename.endswith('.png') and counter % 3 == 0:
         print "%s\\%s hash=%08X offset=%08X length=%08X" % \
             (folder_path, filename, file_hash, file_offset, file_size)
         html.write('<img src="%s">' % filename)

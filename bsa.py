@@ -95,8 +95,7 @@ while file_num < file_count:
             f.seek(file_offset)
             data = f.read(file_size)
             header_size = 1 + len(folder_path) + len(filename) + 12
-            d = data
-            d = d[header_size:]
+            d = data[header_size:]
             # Here, we're going to selectively cut out five byte segments of the data stream.  I have
             # no idea what these 5 byte chunks are, but at least for m_letter.png, these offsets work.
             # It's... close to 0x4030 jumps, but not consistent.  For some other files, especially 

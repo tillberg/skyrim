@@ -94,7 +94,7 @@ while file_num < file_count:
             # and 12 assorted extra bytes of who knows what.
             f.seek(file_offset)
             data = f.read(file_size)
-            header_size = len(folder_path) + len(filename) + 8
+            header_size = len(folder_path) + len(filename) + 7
             d = data
             d = d[header_size:]
             # Here, we're going to selectively cut out five byte segments of the data stream.  I have

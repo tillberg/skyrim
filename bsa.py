@@ -106,6 +106,11 @@ while file_num < file_count:
             index3 = 0xc0a0
             index4 = 0x100d0
             pngdata = d[0:(index-5)] + d[(index):(index2 - 5)] + d[(index2):(index3 - 5)] + d[(index3):(index4 - 5)] + d[(index4):0x14000]
+            if filename == 'n_letter.png':
+                for idx in [index, index2, index3]:
+                    removed = d[(idx - 5): idx]
+                    hexstrs = ' '.join(['%02X' % ord(c) for c in removed])
+                    print '%06X: %s' % (idx, hexstrs) 
             pngfile.write(pngdata)
             diff, chunk = parsePngHeaders(pngdata[8:])
             delta = (len(data) >> 14) * 5 - diff if diff is not None else None

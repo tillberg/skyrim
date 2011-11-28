@@ -84,7 +84,7 @@ html = open('pics.html', 'w')
 html.write('<style>img { float: left; border: 1px solid black; height: 200px; width: 200px; }</style>')
 while file_num < file_count:
     folder_path, filename, file_hash, file_offset, file_size = files2[file_num]
-    if filename.endswith('letter.png'):
+    if filename.endswith('.png'):
         print "%s\\%s hash=%08X offset=%08X length=%08X" % \
             (folder_path, filename, file_hash, file_offset, file_size)
         html.write('<img src="%s">' % filename)
@@ -93,28 +93,21 @@ while file_num < file_count:
             # Beyond that, there is a header for each file that includes the folder path, filename,
             # and 12 assorted extra bytes of who knows what.
             f.seek(file_offset)
-            data = f.read(file_size)
-            header_size = 1 + len(folder_path) + len(filename) + 12
-            d = data[header_size:]
-            # Here, we're going to selectively cut out five byte segments of the data stream.  I have
-            # no idea what these 5 byte chunks are, but at least for m_letter.png, these offsets work.
-            # It's... close to 0x4030 jumps, but not consistent.  For some other files, especially 
-            # the larger PNGs, something else is going on, as the differences between the PNG headers
-            # are misaligned by non-multiples of 5.
-            index = 0x403b
-            index2 = 0x8070
-            index3 = 0xc0a0
-            index4 = 0x100d0
-            pngdata = d[0:(index-5)] + d[(index):(index2 - 5)] + d[(index2):(index3 - 5)] + d[(index3):(index4 - 5)] + d[(index4):0x14000]
-            if filename == 'n_letter.png':
-                for idx in [index, index2, index3]:
-                    removed = d[(idx - 5): idx]
-                    hexstrs = ' '.join(['%02X' % ord(c) for c in removed])
-                    print '%06X: %s' % (idx, hexstrs) 
+            header_size = 1 + len(folder_path) + len(filename) + 7
+            file_header = f.read(header_size)
+            dataArr = []
+            while True:
+                header = f.read(5)
+                last_marker, segment_length, checksum = struct.unpack("<BHH", header)
+                print 'seg length: %s' % segment_length
+                dataArr.append(f.read(segment_length))
+                if last_marker:
+                    break
+            pngdata = ''.join(dataArr)
             pngfile.write(pngdata)
             diff, chunk = parsePngHeaders(pngdata[8:])
-            delta = (len(data) >> 14) * 5 - diff if diff is not None else None
-            print 'diff: %s, delta from exp: %s' % (diff, delta)
+            #delta = (len(data) >> 14) * 5 - diff if diff is not None else None
+            #print 'diff: %s, delta from exp: %s' % (diff, delta)
             # parsePngHeaders returns the amount that the size of the last chunk was off by as well
             # as the data chunk from the png.  This should be zlib decrompressible.
             try:

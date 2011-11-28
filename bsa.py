@@ -4,6 +4,7 @@ from __future__ import with_statement
 import struct
 import sys
 import os
+import zlib
 
 if len(sys.argv) == 2:
     BSA_FILE = sys.argv[1]
@@ -63,8 +64,10 @@ def parsePngHeaders(data):
             real_offset = data.find('IEND') - 4
             print 'offset: %s, real: %s' % (offset, real_offset)
             offset = real_offset
-        if chunktype != 'IEND':
-            parsePngHeaders(data[(offset):])
+            return chunk
+        else:
+            return parsePngHeaders(data[(offset):])
+    return None
 
 file_num = 0
 html = open('pics.html', 'w')
@@ -79,7 +82,7 @@ while file_num < file_count:
             # The offset given by the BSA headers above are all 1 byte off of actual file offsets
             # Beyond that, there is a header for each file that includes the folder path, filename,
             # and 12 assorted extra bytes of who knows what.
-            header_size = len(folder_path) + len(filename) + 12
+            header_size = len(folder_path) + len(filename) + 8
             f.seek(file_offset)
             dataArr = []
             bytes_left = file_size# - header_size
@@ -88,12 +91,12 @@ while file_num < file_count:
             while bytes_left > 0:
                 #position = f.tell()
                 #bytes_to_read = max(0, 0x4000 - (0x3fff & (position + 0x2022)))
-                bytes_to_read = min(bytes_left, 0x4000 - 1)
+                bytes_to_read = min(bytes_left, 0x4000)
                 if bytes_to_read > bytes_left:
                     bytes_to_read = bytes_left
-                print ord(f.read(1)[0])
+                f.read(4)
+                f.read(1)
                 dataArr.append(f.read(bytes_to_read))
-                #f.read(4)
                 bytes_left -= bytes_to_read
             data = (''.join(dataArr))[header_size:]
             #for i in range(0x4000):

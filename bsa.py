@@ -80,7 +80,7 @@ html = open('pics.html', 'w')
 html.write('<style>img { float: left; border: 1px solid black; height: 200px; width: 200px; }</style>')
 while file_num < file_count:
     folder_path, filename, file_hash, file_offset, file_size = files2[file_num]
-    if filename.endswith('.png'):
+    if filename.endswith('letter.png'):
         print "%s\\%s hash=%08X offset=%08X length=%08X" % \
             (folder_path, filename, file_hash, file_offset, file_size)
         html.write('<img src="%s">' % filename)
@@ -90,13 +90,21 @@ while file_num < file_count:
             # and 12 assorted extra bytes of who knows what.
             f.seek(file_offset)
             data = f.read(file_size)
-            header_size = 1 + len(folder_path) + len(filename) + 12
-            pngfile = data[header_size:]
-            
+            header_size = len(folder_path) + len(filename) + 8
+            d = data
+            d = d[header_size:]
+            index = 0x403b
+            index2 = 0x8070
+            index3 = 0xc0a0
+            index4 = 0x100d0
+            pngfile = d[5:(index)] + d[(index + 5):index2] + d[(index2 + 5):index3] + d[(index3 + 5):index4] + d[(index4 + 5):0x14000]
+            #pngfile = d[5:0x4000] + d[0x4005:0x8000] + d[0x8005:0xc000] + d[0xc005:0x10000] + d[0x10005:0x14000]
             f2.write(pngfile)
             diff, chunk = parsePngHeaders(pngfile[8:])
             delta = (len(pngfile) >> 14) * 5 - diff if diff is not None else None
             print 'diff: %s, delta from exp: %s' % (diff, delta)
+            # parsePngHeaders returns the amount that the size of the last chunk was off by as well
+            # as the data chunk from the png.  This should be zlib decrompressible.
             try:
                 zlib.decompress(chunk)
                 print 'success!'
